@@ -1,0 +1,25 @@
+{
+  "name": "futbin-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ginid-dev/futbin-bot.git"
+  },
+  "author": "ginid thakur",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ginid-dev/futbin-bot/issues"
+  },
+  "homepage": "https://github.com/Ginid-dev/futbin-bot#readme",
+  "dependencies": {
+    "jsonfile": "^6.1.0",
+    "node-cron": "^3.0.0",
+    "puppeteer": "^9.0.0"
+  }
+}
