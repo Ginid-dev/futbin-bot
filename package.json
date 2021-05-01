@@ -18,8 +18,11 @@
   },
   "homepage": "https://github.com/Ginid-dev/futbin-bot#readme",
   "dependencies": {
+    "cron": "^1.8.2",
     "jsonfile": "^6.1.0",
-    "node-cron": "^3.0.0",
-    "puppeteer": "^9.0.0"
+    "puppeteer": "^9.0.0",
+    "puppeteer-extra": "^3.1.18",
+    "puppeteer-extra-plugin-adblocker": "^2.11.11",
+    "puppeteer-extra-plugin-stealth": "^2.7.8"
   }
 }
