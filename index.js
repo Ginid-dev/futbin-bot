@@ -3,14 +3,16 @@ const browserInstance = require("./components/browser");
 
 const { authController, playerPriceController } = require("./controllers");
 
-const updatePlayerPriceJob = new CronJob(
-  "* * * * *",
-  () => {
-    return playerPriceController(browserInstance);
-  },
-  null,
-  true,
-  "America/Los_Angeles"
-);
+authController(browserInstance);
 
-updatePlayerPriceJob.start();
+// const updatePlayerPriceJob = new CronJob(
+//   "* * * * *",
+//   () => {
+//     return playerPriceController(browserInstance);
+//   },
+//   null,
+//   true,
+//   "America/Los_Angeles"
+// );
+
+// updatePlayerPriceJob.start();
