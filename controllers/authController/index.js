@@ -19,7 +19,7 @@ module.exports = async (browserInstance) => {
 
     const page = await browser.newPage();
 
-    await page.setUserAgent(userAgent.toString());
+    // await page.setUserAgent(userAgent.toString());
     await page.goto(url, { waitUntil: "load", timeout: 0 });
 
     // Set Cookies and localstorage items to create session
@@ -36,6 +36,8 @@ module.exports = async (browserInstance) => {
       }, localStorageData);
 
       for (let cookie of cookies) {
+        console.log("cookie");
+        console.log(cookie);
         await page.setCookie(cookie);
       }
     } else {

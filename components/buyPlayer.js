@@ -9,10 +9,10 @@ module.exports = async (page) => {
   try {
     await page.setRequestInterception(true);
 
-    page.on("request", (request) => {
-      updateUrl(request);
-      return Promise.resolve().then(() => request.continue());
-    });
+    /*  page.on("request", async (request) => {
+      await updateUrl(request);
+      request.continue();
+    }); */
 
     await page.waitForSelector(transferButton);
     await page.waitForTimeout(10000);
@@ -46,10 +46,10 @@ const makeBid = async (page, player) => {
   return;
 };
 
-const updateUrl = (request) => {
+const updateUrl = async (request) => {
   console.log("currentPlayer");
   console.log(currentPlayer);
 
   console.log("Request");
-  console.log(request);
+  // console.log(request);
 };
