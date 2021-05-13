@@ -6,7 +6,10 @@ const { email, password, backupcode } = require("../../config/auth.json");
 const cookies = require("../../config/cookies.json");
 const localStorageData = require("../../config/localstorage.json");
 
-const buyPlayer = require("../../components/buyPlayer");
+const buyPlayers = require("../../components/buyPlayer");
+const sellPayers = require("../../components/sellPlayer");
+
+const interval = 1000 * 20;
 
 module.exports = async (browserInstance) => {
   try {
@@ -19,7 +22,7 @@ module.exports = async (browserInstance) => {
 
     const page = await browser.newPage();
 
-    // await page.setUserAgent(userAgent.toString());
+    await page.setUserAgent(userAgent.toString());
     await page.goto(url, { waitUntil: "load", timeout: 0 });
 
     // Set Cookies and localstorage items to create session
@@ -35,12 +38,9 @@ module.exports = async (browserInstance) => {
         });
       }, localStorageData);
 
-      for (let cookie of cookies) {
-        console.log("cookie");
-        console.log(cookie);
-        await page.setCookie(cookie);
-      }
+      for (let cookie of cookies) await page.setCookie(cookie);
     } else {
+      // Wait and Click on the login button
       await page.waitForSelector(loginBtnSelector);
 
       await page.waitForTimeout(5000);
@@ -50,6 +50,7 @@ module.exports = async (browserInstance) => {
       // Login to Web app with email and password
       await page.waitForSelector("#email");
 
+      // Enter user email and password
       await page.evaluate(
         (email, password) => {
           document.querySelector("#email").value = email;
@@ -61,6 +62,7 @@ module.exports = async (browserInstance) => {
 
       await page.waitForTimeout(1000);
 
+      // Click on the sign button
       await page.click("#btnLogin");
 
       // Open verification page
@@ -73,26 +75,35 @@ module.exports = async (browserInstance) => {
         document.querySelector("#oneTimeCode").value = backupcode;
       }, backupcode);
 
+      // Click on the submit button
       await page.click("#btnSubmit");
 
-      // Store cookies on first login of Bot
-      const cookiesObject = await page.cookies();
-
       await page.waitForTimeout(5000);
-      const localStorageData = await page.evaluate(() => {
-        let json = {};
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          json[key] = localStorage.getItem(key);
-        }
-        return json;
-      });
-
-      jsonfile.writeFile("./config/cookies.json", cookiesObject);
-      jsonfile.writeFile("./config/localstorage.json", localStorageData);
     }
 
-    await buyPlayer(page);
+    // Store cookies in cookies.json and localstorage.json
+    const cookiesObject = await page.cookies();
+    const localStorageItems = await page.evaluate(() => {
+      let json = {};
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        json[key] = localStorage.getItem(key);
+      }
+      return json;
+    });
+
+    jsonfile.writeFile("./config/cookies.json", cookiesObject);
+    jsonfile.writeFile("./config/localstorage.json", localStorageItems);
+
+    await page.waitForTimeout(3000);
+
+    setInterval(() => {
+      // Start Buying players
+      await buyPlayers(page);
+
+      // Start selling players
+      await sellPayers(page);
+    }, interval);
 
     return logger("Login to Web APP", "log");
   } catch (error) {
