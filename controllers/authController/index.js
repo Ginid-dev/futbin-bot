@@ -97,7 +97,7 @@ module.exports = async (browserInstance) => {
 
     await page.waitForTimeout(3000);
 
-    setInterval(() => {
+    setInterval(async () => {
       // Start Buying players
       await buyPlayers(page);
 
