@@ -17,17 +17,21 @@ module.exports = async (page) => {
 
     // Alter the players HTTP request for a specific player
     await page.setRequestInterception(true);
-    page.on("request", async (request) => {
-      if (
-        request.url() == searchUrl &&
-        request.method() == "GET" &&
-        request.resourceType() == "xhr"
-      ) {
-        let url = searchUrl + "&maskedDefId=" + currentPlayer.resource_id;
-        return request.continue({ url: url });
-      }
-      request.continue();
-    });
+    try {
+      page.on("request", async (request) => {
+        if (
+          request.url() == searchUrl &&
+          request.method() == "GET" &&
+          request.resourceType() == "xhr"
+        ) {
+          let url = searchUrl + "&maskedDefId=" + currentPlayer.resource_id;
+          return request.continue({ url: url });
+        }
+        request.continue();
+      });
+    } catch (error) {
+      console.log("Request intercepted");
+    }
 
     for (let player of players) {
       currentPlayer = player;
