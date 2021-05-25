@@ -9,7 +9,7 @@ const localStorageData = require("../../config/localstorage.json");
 const buyPlayers = require("../../components/buyPlayer");
 const sellPayers = require("../../components/sellPlayer");
 
-const interval = 1000 * 20;
+const interval = 1000 * 60 * 5;
 
 module.exports = async (browserInstance) => {
   try {
@@ -97,13 +97,7 @@ module.exports = async (browserInstance) => {
 
     await page.waitForTimeout(3000);
 
-    setInterval(async () => {
-      // Start Buying players
-      await buyPlayers(page);
-
-      // Start selling players
-      await sellPayers(page);
-    }, interval);
+    await tradePlayers(page);
 
     return logger("Login to Web APP", "log");
   } catch (error) {
@@ -111,4 +105,16 @@ module.exports = async (browserInstance) => {
     console.log(error);
     return logger(error, "error");
   }
+};
+
+const tradePlayers = async (page) => {
+  // Start Buying players
+  await buyPlayers(page);
+  // Start selling players
+  await sellPayers(page);
+
+  // Sell and Buy player on specified Interval
+  setTimeout(() => {
+    tradePlayers(page);
+  }, interval);
 };

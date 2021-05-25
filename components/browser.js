@@ -18,7 +18,10 @@ const RecaptchaPlugin = require("puppeteer-extra-plugin-recaptcha");
 // );
 
 module.exports = async () => {
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({
+    headless: false,
+    ignoreHTTPSErrors: true,
+  });
 
   return browser;
 };

@@ -25,8 +25,7 @@ module.exports = async (page) => {
           }
         }
       } catch (error) {
-        console.log("Error on response");
-        // console.log(error);
+        return;
       }
     });
   } catch (error) {

@@ -29,14 +29,14 @@ createLogFiles("logs", "errors.json");
 
 authController(browserInstance);
 
-const updatePlayerPriceJob = new CronJob(
-  "* * * * *",
-  () => {
-    return playerPriceController(browserInstance);
-  },
-  null,
-  true,
-  "America/Los_Angeles"
-);
+// const updatePlayerPriceJob = new CronJob(
+//   "* * * * *",
+//   () => {
+//     return playerPriceController(browserInstance);
+//   },
+//   null,
+//   true,
+//   "America/Los_Angeles"
+// );
 
-updatePlayerPriceJob.start();
+// updatePlayerPriceJob.start();

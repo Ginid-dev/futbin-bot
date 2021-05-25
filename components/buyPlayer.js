@@ -17,26 +17,28 @@ module.exports = async (page) => {
 
     // Alter the players HTTP request for a specific player
     await page.setRequestInterception(true);
-    try {
-      page.on("request", async (request) => {
+
+    page.on("request", async (request) => {
+      try {
         if (
           request.url() == searchUrl &&
           request.method() == "GET" &&
           request.resourceType() == "xhr"
         ) {
           let url = searchUrl + "&maskedDefId=" + currentPlayer.resource_id;
-          return request.continue({ url: url });
-        }
-        request.continue();
-      });
-    } catch (error) {
-      console.log("Request intercepted");
-    }
+          return await request.continue({ url: url });
+        } else await request.continue({ url: request.url() });
+      } catch (error) {
+        return;
+      }
+    });
 
     for (let player of players) {
       currentPlayer = player;
       await makeBid(page, player);
     }
+
+    return;
   } catch (error) {
     console.log(error);
   }
@@ -53,8 +55,8 @@ const makeBid = async (page, player) => {
 
     // Return if user don't have enough coins
     if (avaliableCoins < buyPrice) {
-      console.log("Insufficent Coins");
-      // return;
+      console.log("Insufficient Coins");
+      return Promise.resolve();
     }
 
     // Wait and Click on the Transfer button on left side navigation
